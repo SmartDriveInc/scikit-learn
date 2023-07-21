@@ -264,6 +264,15 @@ def setup_package():
                     python_requires=">=3.6",
                     install_requires=min_deps.tag_to_packages['install'],
                     package_data={'': ['*.pxd']},
+                    # Because the scikit-learn repository contains multiple top-level directories,
+                    # automatic discovery of the package layout does not work properly
+                    # and the package cannot be compiled by default.
+                    # Ref. https://setuptools.pypa.io/en/latest/userguide/package_discovery.html#automatic-discovery
+                    #
+                    # Therefore, disable automatic discovery by specifying an empty array
+                    # for the py_modules argument, as per the following comment:
+                    # https://github.com/pypa/setuptools/issues/3197#issuecomment-1078770109
+                    py_modules=[],
                     **extra_setuptools_args)
 
     commands = [arg for arg in sys.argv[1:] if not arg.startswith('-')]
